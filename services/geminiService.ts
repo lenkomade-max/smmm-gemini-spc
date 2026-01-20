@@ -63,8 +63,7 @@ Follow all system instructions strictly. Focus on turning the student into a pro
       max_tokens: 16384,
       // OpenRouter equivalent of thinkingConfig for Gemini 3 Pro
       reasoning: {
-        max_tokens: 4000,  // Same as original thinkingBudget
-        effort: "high"      // High-quality thinking mode
+        max_tokens: 4000  // Same as original thinkingBudget
       }
     })
   });

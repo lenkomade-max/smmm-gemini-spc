@@ -23,7 +23,7 @@ Kitabdan verilmiş fəsli elə bir dərsə çevir ki, oxuyan 14-25 yaşlı gənc
 **Texniki tələb:** Dərs 1500-2500 söz arası olmalıdır. Azərbaycan dilində. Kitab adlarını çəkmə.`;
 
 export const MODELS = [
-  { id: 'gemini-3-pro-preview', name: 'Gemini 3 Pro (Best reasoning)' },
-  { id: 'gemini-3-flash-preview', name: 'Gemini 3 Flash (Fast batching)' },
-  { id: 'gemini-2.5-pro-preview', name: 'Gemini 2.5 Pro (Alternative)' }
+  { id: 'google/gemini-3-pro-preview', name: 'Gemini 3 Pro (Best reasoning)' },
+  { id: 'google/gemini-3-flash-preview', name: 'Gemini 3 Flash (Fast batching)' },
+  { id: 'google/gemini-2.5-pro-preview', name: 'Gemini 2.5 Pro (Alternative)' }
 ];

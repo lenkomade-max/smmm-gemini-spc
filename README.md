@@ -1,20 +1,53 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# SMM Content Factory (OpenRouter Edition)
 
-# Run and deploy your AI Studio app
+Professional SMM training content generator powered by AI. Converts theory into client-ready lessons for Azerbaijan market.
 
-This contains everything you need to run your app locally.
+## Features
 
-View your app in AI Studio: https://ai.studio/apps/drive/17NZeHGWK0FEg65H1Syezoc9G5spAw5Sr
+- Batch processing of 48+ chapters
+- Multiple AI models (Gemini 3 Pro, Flash, 2.5 Pro)
+- Advanced thinking mode for high-quality content
+- Real-time processing queue
+- Customizable system prompts
+- Export functionality
 
 ## Run Locally
 
-**Prerequisites:**  Node.js
+**Prerequisites:** Node.js 18+
 
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+2. **Configure API Key:**
+   - Copy `.env.example` to `.env.local`:
+     ```bash
+     cp .env.example .env.local
+     ```
+   - Get your OpenRouter API key at: https://openrouter.ai/keys
+   - Add to `.env.local`:
+     ```
+     VITE_OPENROUTER_API_KEY=your_key_here
+     ```
+
+3. **Run the app:**
+   ```bash
+   npm run dev
+   ```
+
+## Deploy to Vercel
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/lenkomade-max/smmm-gemini-spc)
+
+1. Click the Deploy button above
+2. Connect your GitHub account
+3. Add environment variable: `VITE_OPENROUTER_API_KEY`
+4. Deploy!
+
+## Tech Stack
+
+- React 19 + TypeScript
+- Vite
+- OpenRouter API
+- Tailwind CSS

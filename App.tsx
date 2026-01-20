@@ -17,7 +17,18 @@ const App: React.FC = () => {
   const [systemPrompt, setSystemPrompt] = useState(DEFAULT_SYSTEM_PROMPT);
   const [selectedModel, setSelectedModel] = useState(MODELS[0].id);
   const [isProcessing, setIsProcessing] = useState(false);
-  
+
+  // New settings
+  const [wordCount, setWordCount] = useState({
+    enabled: true,
+    min: 1500,
+    max: 2500
+  });
+  const [previousContext, setPreviousContext] = useState({
+    enabled: true,
+    summaryLength: 300
+  });
+
   // Ref to track processing state across async cycles to prevent race conditions
   const isRunningRef = useRef(false);
 
@@ -28,7 +39,7 @@ const App: React.FC = () => {
 
   const runBatch = async () => {
     if (isRunningRef.current) return;
-    
+
     isRunningRef.current = true;
     setIsProcessing(true);
 
@@ -45,30 +56,50 @@ const App: React.FC = () => {
 
       const chapterToProcess = currentChapters[nextIndex];
 
+      // Add context from previous completed lesson if enabled
+      if (previousContext.enabled && nextIndex > 0) {
+        const previousChapter = currentChapters
+          .slice(0, nextIndex)
+          .reverse()
+          .find(c => c.status === 'completed' && c.generatedLesson);
+
+        if (previousChapter && previousChapter.generatedLesson) {
+          chapterToProcess.previousContext = {
+            title: previousChapter.title,
+            summary: previousChapter.generatedLesson.slice(0, previousContext.summaryLength)
+          };
+        }
+      }
+
       // Mark current item as processing in state
-      setChapters(prev => prev.map((c, i) => 
+      setChapters(prev => prev.map((c, i) =>
         i === nextIndex ? { ...c, status: 'processing' } : c
       ));
 
       try {
-        const lesson = await generateSmmLesson(chapterToProcess, systemPrompt, selectedModel);
-        
+        const lesson = await generateSmmLesson(
+          chapterToProcess,
+          systemPrompt,
+          selectedModel,
+          wordCount
+        );
+
         // Mark as completed
-        setChapters(prev => prev.map((c, i) => 
+        setChapters(prev => prev.map((c, i) =>
           i === nextIndex ? { ...c, status: 'completed', generatedLesson: lesson } : c
         ));
-        
+
         // Small update to local copy to keep while loop logic aware (though setChapters is async)
         currentChapters[nextIndex].status = 'completed';
       } catch (err: any) {
         console.error("Batch processing error:", err);
-        setChapters(prev => prev.map((c, i) => 
+        setChapters(prev => prev.map((c, i) =>
           i === nextIndex ? { ...c, status: 'error', error: err.message } : c
         ));
         currentChapters[nextIndex].status = 'error';
       }
     }
-    
+
     setIsProcessing(false);
     isRunningRef.current = false;
   };
@@ -120,11 +151,15 @@ const App: React.FC = () => {
             />
           )}
           {activeTab === 'settings' && (
-            <Settings 
-              prompt={systemPrompt} 
+            <Settings
+              prompt={systemPrompt}
               setPrompt={setSystemPrompt}
               model={selectedModel}
               setModel={setSelectedModel}
+              wordCount={wordCount}
+              setWordCount={setWordCount}
+              previousContext={previousContext}
+              setPreviousContext={setPreviousContext}
             />
           )}
           {activeTab === 'preview' && (
